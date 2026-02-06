@@ -1,9 +1,13 @@
 import type { Request, ResponseToolkit } from 'hapi';
+import { TodosService } from '../services';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getTodos = (request: Request, h: ResponseToolkit) => {
+export const getTodos = async (request: Request, h: ResponseToolkit) => {
 
-    return 'Hello TODOS!';
+    const filter = request.query.filter as 'ALL' | 'COMPLETE' | 'INCOMPLETE';
+    const orderBy = request.query.orderBy as 'CREATED_AT' | 'COMPLETED_AT' | 'DESCRIPTION';
+
+    return await TodosService.getTodos(filter, orderBy);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
