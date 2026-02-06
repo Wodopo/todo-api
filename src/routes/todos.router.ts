@@ -9,6 +9,7 @@ export const routes = [
         path: basePath,
         handler: TodosController.getTodos,
         options: {
+            tags: ['api'],
             validate: {
                 query: Joi.object({
                     filter: Joi.string().valid('ALL', 'COMPLETE', 'INCOMPLETE').default('ALL'),
