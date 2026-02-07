@@ -31,13 +31,19 @@ export const getTodos = async (filter: 'ALL' | 'COMPLETE' | 'INCOMPLETE', orderB
 
 export const postTodos = async (description: string) => {
 
-    return await new Promise<void>((resolve, reject) => {
+    return await new Promise<Todo>((resolve, reject) => {
 
         const queryBuilder = pg('todos');
 
-        queryBuilder.insert({ description });
+        queryBuilder.insert({ description }).returning([
+            'id',
+            'state',
+            'description',
+            'createdat',
+            'completedat'
+        ]);
 
-        queryBuilder.then(() => resolve())
+        queryBuilder.then((todos) => resolve(todos[0]))
             .catch((e) => reject(e));
     });
 };

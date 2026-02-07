@@ -10,11 +10,12 @@ export const getTodos = async (request: Request, h: ResponseToolkit) => {
     return await TodosService.getTodos(filter, orderBy);
 };
 
+type postPayload = { description: string }
 export const postTodos = async (request: Request, h: ResponseToolkit) => {
 
-    const description = request.payload.description as string;
-    await TodosService.postTodos(description);
-    return h.response().code(201);
+    const description = (request.payload as postPayload).description;
+    const newTodo = await TodosService.postTodos(description);
+    return h.response(newTodo).code(201);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
