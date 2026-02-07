@@ -1,5 +1,5 @@
 import * as Hapi from '@hapi/hapi';
-import { Default, Todos, Auth } from './routes';
+import { Default, Todos, Auth, Users } from './routes';
 import Inert from '@hapi/inert';
 import Vision from '@hapi/vision';
 import HapiSwagger from 'hapi-swagger';
@@ -8,14 +8,15 @@ import Jwt from '@hapi/jwt';
 const init = async () => {
 
     const server = Hapi.server({
-        port: 3000,
+        port: process.env.HAPI_PORT || 3000,
         host: 'localhost'
     });
 
     server.route([
         ...Default.routes,
         ...Todos.routes,
-        ...Auth.routes
+        ...Auth.routes,
+        ...Users.routes
     ] as Array<Hapi.ServerRoute>);
 
     const swaggerOptions: HapiSwagger.RegisterOptions = {

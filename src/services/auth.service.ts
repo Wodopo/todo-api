@@ -2,15 +2,7 @@ import { pg } from '../db';
 import * as Password from '../auth/password';
 import * as Jwt from '../auth/jwt';
 
-interface User {
-    id: string,
-    username: string,
-    name: string,
-    email: string,
-    password_hash: string,
-    registered_at: Date,
-    last_updated_at: Date,
-}
+import type { User } from '../models/user.model';
 
 export const login = async (username: string, password: string) => {
 
@@ -42,7 +34,6 @@ export const register = async (username: string, password: string, name: string,
             .insert({ username, password_hash: Password.hash(password), name, email })
             .returning('*');
 
-        console.log(queryBuilder.toString());
         queryBuilder
             .then((user) => {
 

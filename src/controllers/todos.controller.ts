@@ -1,14 +1,6 @@
 import type { Request, ResponseToolkit } from 'hapi';
 import { TodosService } from '../services';
-
-interface JwtUser {
-    id: string;
-    username: string;
-}
-
-interface JwtCredentials {
-    user: JwtUser;
-}
+import type { JwtCredentials } from '../models/jwt.model';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getTodos = async (request: Request, h: ResponseToolkit) => {

@@ -1,6 +1,3 @@
-docker stop elecctro-db
-docker rm elecctro-db
-
 docker build -t elecctro-db .
 
 docker run -d \
@@ -11,5 +8,4 @@ docker run -d \
     -e POSTGRES_USER:postgres \
     -e POSTGRES_DB=elecctro \
     elecctro-db
-
     
