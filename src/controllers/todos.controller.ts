@@ -18,10 +18,36 @@ export const postTodos = async (request: Request, h: ResponseToolkit) => {
     return h.response(newTodo).code(201);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const patchTodos = (request: Request, h: ResponseToolkit) => {
+type patchPayload = { state?: 'COMPLETE' | 'INCOMPLETE', description?: string }
+export const patchTodos = async (request: Request, h: ResponseToolkit) => {
 
-    return 'Hello World!';
+    const id = request.params.id;
+    const payload = request.payload as patchPayload;
+    const state = payload.state;
+    const description = payload.description;
+
+    // (state === 'COMPLETE' && description) is handled by Joi
+
+    if (state !== 'INCOMPLETE' && description) {
+        const todo = await TodosService.getTodo(id);
+        if (!todo) {
+            return h.response({
+                statusCode: 404,
+                error: 'Not Found',
+                message: 'Resource not found'
+            }).code(404);
+        }
+
+        if (todo.state === 'COMPLETE') {
+            return h.response({
+                statusCode: 400,
+                error: 'Bad Request',
+                message: 'Invalid request payload input'
+            }).code(400);
+        }
+    }
+
+    return await TodosService.patchTodo(id, { state, description });
 };
 
 export const deleteTodos = async (request: Request, h: ResponseToolkit) => {

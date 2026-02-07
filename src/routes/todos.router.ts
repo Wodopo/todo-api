@@ -26,13 +26,31 @@ export const routes = [
             tags: ['api'],
             validate: {
                 payload: Joi.object({
-                    description: Joi.string().min(1)
+                    description: Joi.string().min(1).required()
                 })
             }
         }
     },
     {
-        method: 'PATCH', path: `${basePath}/{id}`, handler: TodosController.patchTodos
+        method: 'PATCH',
+        path: `${basePath}/{id}`,
+        handler: TodosController.patchTodos,
+        options: {
+            tags: ['api'],
+            validate: {
+                params: Joi.object({
+                    id: Joi.string().uuid()
+                }),
+                payload: Joi.object({
+                    state: Joi.string().valid('COMPLETE', 'INCOMPLETE'),
+                    description: Joi.when('state', {
+                        is: 'COMPLETE',
+                        then: Joi.forbidden(),
+                        otherwise: Joi.string().min(1)
+                    })
+                }).min(1)
+            }
+        }
     },
     {
         method: 'DELETE',

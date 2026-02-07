@@ -29,21 +29,64 @@ export const getTodos = async (filter: 'ALL' | 'COMPLETE' | 'INCOMPLETE', orderB
     });
 };
 
-export const postTodos = async (description: string) => {
+export const getTodo = async (id: string) => {
 
-    return await new Promise<Todo>((resolve, reject) => {
+    return await new Promise<Todo | null>((resolve, reject) => {
 
-        const queryBuilder = pg('todos');
-
-        queryBuilder.insert({ description }).returning([
+        const queryBuilder = pg('todos').where({ id }).returning([
             'id',
             'state',
             'description',
             'createdat',
             'completedat'
-        ]);
+        ]).first();
+
+        queryBuilder.then((todo) => {
+
+            const result = todo as Todo | null;
+            resolve(result);
+        }).catch((e) => reject(e));
+    });
+};
+
+export const postTodos = async (description: string) => {
+
+    return await new Promise<Todo>((resolve, reject) => {
+
+        const queryBuilder = pg('todos')
+            .insert({ description })
+            .returning([
+                'id',
+                'state',
+                'description',
+                'createdat',
+                'completedat'
+            ]);
 
         queryBuilder.then((todos) => resolve(todos[0]))
+            .catch((e) => reject(e));
+    });
+};
+
+type patchContent = { state?: 'COMPLETE' | 'INCOMPLETE', description?: string }
+export const patchTodo = async (id: string, content: patchContent) => {
+
+    // TODO: completedAt could be updated via a pg trigger on 'state' change
+    const completedat = content.state === 'COMPLETE' ? new Date() : null;
+
+    return await new Promise<Todo>((resolve, reject) => {
+
+        const queryBuilder = pg('todos')
+            .where({ id })
+            .update({ ...content, completedat }, [
+                'id',
+                'state',
+                'description',
+                'createdat',
+                'completedat'
+            ]);
+
+        queryBuilder.then((todos) => resolve(todos[0] as Todo))
             .catch((e) => reject(e));
     });
 };
