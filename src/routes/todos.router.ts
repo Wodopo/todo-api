@@ -7,8 +7,9 @@ const todoModel = Joi.object({
     id: Joi.string().uuid().required().example('76cd4b45-b801-468c-9306-2c95921908c1'),
     state: Joi.string().valid('COMPLETE', 'INCOMPLETE').required().example('COMPLETE'),
     description: Joi.string().required().example('Go to McDonalds'),
-    createdat: Joi.date().required().example('2026-02-07T09:25:29.230Z'),
-    completedat: Joi.date().allow(null).example('2026-02-07T09:27:29.230Z')
+    created_at: Joi.date().required().example('2026-02-07T09:25:29.230Z'),
+    completed_at: Joi.date().allow(null).example('2026-02-07T09:27:29.230Z'),
+    user_id: Joi.string().required().example('daee5b84-807f-4bec-815e-5f5b3a5346e1')
 }).label('Result');
 
 const todosModel = Joi.array().items(todoModel).label('Result');
@@ -20,7 +21,7 @@ export const routes = [
         path: basePath,
         handler: TodosController.getTodos,
         options: {
-            tags: ['api'],
+            tags: ['api', 'todos'],
             validate: {
                 query: Joi.object({
                     filter: Joi.string().valid('ALL', 'COMPLETE', 'INCOMPLETE').default('ALL'),
@@ -44,7 +45,7 @@ export const routes = [
         path: basePath,
         handler: TodosController.postTodos,
         options: {
-            tags: ['api'],
+            tags: ['api', 'todos'],
             validate: {
                 payload: Joi.object({
                     description: Joi.string().min(1).required()
@@ -75,7 +76,7 @@ export const routes = [
         path: `${basePath}/{id}`,
         handler: TodosController.patchTodos,
         options: {
-            tags: ['api'],
+            tags: ['api', 'todos'],
             validate: {
                 params: Joi.object({
                     id: Joi.string().uuid()
@@ -112,7 +113,7 @@ export const routes = [
         path: `${basePath}/{id}`,
         handler: TodosController.deleteTodos,
         options: {
-            tags: ['api'],
+            tags: ['api', 'todos'],
             validate: {
                 params: Joi.object({
                     id: Joi.string().uuid()
