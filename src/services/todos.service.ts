@@ -24,14 +24,37 @@ export const getTodos = async (filter: 'ALL' | 'COMPLETE' | 'INCOMPLETE', orderB
             default: queryBuilder.orderBy('createdat', 'asc'); break;
         }
 
-        queryBuilder.then((data) => {
+        queryBuilder.then((data) => resolve(data as Todo[]))
+            .catch((e) => reject(e));
+    });
+};
 
-            resolve(data as Todo[]);
-        });
+export const postTodos = async (description: string) => {
 
-        queryBuilder.catch((e) => {
+    return await new Promise<void>((resolve, reject) => {
 
-            reject(e);
-        });
+        const queryBuilder = pg('todos');
+
+        queryBuilder.insert({ description });
+
+        queryBuilder.then(() => resolve())
+            .catch((e) => reject(e));
+    });
+};
+
+export const deleteTodos = async (id: string) => {
+
+    return await new Promise<number>((resolve, reject) => {
+
+        const queryBuilder = pg('todos');
+
+        queryBuilder.delete().where({ id });
+
+        queryBuilder.then((deleteCount) => {
+
+            if (typeof deleteCount === 'number') {
+                resolve(deleteCount);
+            }
+        }).catch((e) => reject(e));
     });
 };

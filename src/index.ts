@@ -14,7 +14,8 @@ server.route([
     ...Todos.routes
 ] as Array<Hapi.ServerRoute>);
 
-const swaggerOptions = {
+const swaggerOptions: HapiSwagger.RegisterOptions = {
+    documentationPath: '/docs',
     info: {
         title: 'Elecctro TODO API Documentation',
         version: '1.0.0'

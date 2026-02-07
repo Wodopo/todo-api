@@ -10,10 +10,11 @@ export const getTodos = async (request: Request, h: ResponseToolkit) => {
     return await TodosService.getTodos(filter, orderBy);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const postTodos = (request: Request, h: ResponseToolkit) => {
+export const postTodos = async (request: Request, h: ResponseToolkit) => {
 
-    return 'Hello World!';
+    const description = request.payload.description as string;
+    await TodosService.postTodos(description);
+    return h.response().code(201);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,8 +23,14 @@ export const patchTodos = (request: Request, h: ResponseToolkit) => {
     return 'Hello World!';
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const deleteTodos = (request: Request, h: ResponseToolkit) => {
+export const deleteTodos = async (request: Request, h: ResponseToolkit) => {
 
-    return 'Hello World!';
+    const id = request.params.id;
+    const result = await TodosService.deleteTodos(id);
+
+    if (result === 0) {
+        return h.response().code(404);
+    }
+
+    return h.response().code(204);
 };

@@ -19,12 +19,32 @@ export const routes = [
         }
     },
     {
-        method: 'POST', path: basePath, handler: TodosController.postTodos
+        method: 'POST',
+        path: basePath,
+        handler: TodosController.postTodos,
+        options: {
+            tags: ['api'],
+            validate: {
+                payload: Joi.object({
+                    description: Joi.string().min(1)
+                })
+            }
+        }
     },
     {
         method: 'PATCH', path: `${basePath}/{id}`, handler: TodosController.patchTodos
     },
     {
-        method: 'DELETE', path: `${basePath}/{id}`, handler: TodosController.deleteTodos
+        method: 'DELETE',
+        path: `${basePath}/{id}`,
+        handler: TodosController.deleteTodos,
+        options: {
+            tags: ['api'],
+            validate: {
+                params: Joi.object({
+                    id: Joi.string().uuid()
+                })
+            }
+        }
     }
 ];
