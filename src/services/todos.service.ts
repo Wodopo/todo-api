@@ -49,7 +49,7 @@ export const getTodo = async (id: string) => {
     });
 };
 
-export const postTodos = async (description: string) => {
+export const postTodo = async (description: string) => {
 
     return await new Promise<Todo>((resolve, reject) => {
 
@@ -91,7 +91,7 @@ export const patchTodo = async (id: string, content: patchContent) => {
     });
 };
 
-export const deleteTodos = async (id: string) => {
+export const deleteTodo = async (id: string) => {
 
     return await new Promise<number>((resolve, reject) => {
 

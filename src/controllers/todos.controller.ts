@@ -14,7 +14,7 @@ type postPayload = { description: string }
 export const postTodos = async (request: Request, h: ResponseToolkit) => {
 
     const description = (request.payload as postPayload).description;
-    const newTodo = await TodosService.postTodos(description);
+    const newTodo = await TodosService.postTodo(description);
     return h.response(newTodo).code(201);
 };
 
@@ -53,7 +53,7 @@ export const patchTodos = async (request: Request, h: ResponseToolkit) => {
 export const deleteTodos = async (request: Request, h: ResponseToolkit) => {
 
     const id = request.params.id;
-    const result = await TodosService.deleteTodos(id);
+    const result = await TodosService.deleteTodo(id);
 
     if (result === 0) {
         return h.response().code(404);
