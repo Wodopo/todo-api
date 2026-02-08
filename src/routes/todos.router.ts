@@ -90,7 +90,7 @@ export const routes = [
                     })
                 }).min(1)
             },
-            response: { schema: todosModel },
+            response: { schema: todoModel },
             plugins: {
                 'hapi-swagger': {
                     responses: {

@@ -86,7 +86,8 @@ export const patchTodo = async (userId: string, id: string, content: patchConten
                 'state',
                 'description',
                 'created_at',
-                'completed_at'
+                'completed_at',
+                'user_id'
             ]);
 
         queryBuilder
