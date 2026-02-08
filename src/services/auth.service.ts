@@ -37,7 +37,8 @@ export const register = async (username: string, password: string, name: string,
         queryBuilder
             .then((user) => {
 
-                const token = Jwt.generateToken(user as unknown as User);
+                console.log(user);
+                const token = Jwt.generateToken(user[0] as unknown as User);
                 resolve(token);
 
             }).catch((e) => reject(e));
